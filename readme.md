@@ -1,6 +1,6 @@
 == horse_thatbooks ==
 
-This is the source code for [@horse_thatbooks](http://twitter.com/horse_thatbooks). Created in about an hour at THATCamp CHNM 2012.
+This is the source code for [@horse_thatbooks](http://twitter.com/horse_thatbooks). Created at THATCamp CHNM 2012.
 
 In a nutshell, it does the following:
 
@@ -10,10 +10,12 @@ In a nutshell, it does the following:
 * Adds the #thatcamp hashtag and tweets
 
 Thanks to the following libraries:
-[MarkovBigram](https://github.com/robertkleffner/MarkovBigram)
-[twitteroauth](https://github.com/abraham/twitteroauth)
+
+* [MarkovBigram](https://github.com/robertkleffner/MarkovBigram)
+* [twitteroauth](https://github.com/abraham/twitteroauth)
 
 == How to use ==
+
 1. Create a file called tweets.txt
 1. Copy config.sample.php to config.php
 1. Get creds from Twitter
