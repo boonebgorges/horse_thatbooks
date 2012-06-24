@@ -2,8 +2,11 @@
 
 require( dirname(__FILE__) . '/config.php' );
 
+// Sometimes I turn off the throttle if I want to fire a tweet manually
 define( 'THROTTLE', 1 );
 
+// On my setup, cron hits this script once every minute. I only run it one out of every 48 times (roughly every 8 hours).
+// Adjust as necessary
 if ( defined( 'THROTTLE' ) && THROTTLE ) {
 	$rand = rand( 0, 60*8 );
 	if ( 4 != $rand ) {
@@ -13,6 +16,7 @@ if ( defined( 'THROTTLE' ) && THROTTLE ) {
 
 $query = "#thatcamp";
 
+// Don't include tweets from the following users
 $exclude_users = array(
 	'horse_thatbooks'
 );
@@ -93,6 +97,7 @@ foreach( $botched_url_snippets as $bus => $r ) {
 // Send an API request to verify credentials
 $credentials = $oauth->get("account/verify_credentials");
 
+// Make sure we're short enough
 if ( strlen( $output ) > 130 ) {
 	$output_a = explode( ' ', $output );
 	$new_output = '';
