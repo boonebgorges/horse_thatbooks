@@ -5,7 +5,7 @@ require( dirname(__FILE__) . '/config.php' );
 // Sometimes I turn off the throttle if I want to fire a tweet manually
 define( 'THROTTLE', 1 );
 
-// On my setup, cron hits this script once every minute. I only run it one out of every 48 times (roughly every 8 hours).
+// On my setup, cron hits this script once every minute. I only run it one out of every 480 times (roughly every 8 hours).
 // Adjust as necessary
 if ( defined( 'THROTTLE' ) && THROTTLE ) {
 	$rand = rand( 0, 60*8 );
