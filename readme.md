@@ -7,7 +7,7 @@ In a nutshell, it does the following:
 * Pulls the latest tweets with the #thatcamp hashtag
 * Stores them in its tweet cache (tweets.txt, which holds up to 500 tweets)
 * Runs them through a Markov chain process to create some new text
-* Adds the #thatcamp hashtag and tweets
+* Adds the #thatcamp hashtag, and sends the tweet
 
 Thanks to the following libraries:
 
