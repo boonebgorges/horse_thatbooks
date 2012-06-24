@@ -1,6 +1,6 @@
 == horse_thatbooks ==
 
-This is the source code for [@horse_thatbooks](http://twitter.com/horse_thatbooks).
+This is the source code for [@horse_thatbooks](http://twitter.com/horse_thatbooks). Created in about an hour at THATCamp CHNM 2012.
 
 In a nutshell, it does the following:
 
