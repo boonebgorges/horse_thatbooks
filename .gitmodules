@@ -1,3 +1,6 @@
 [submodule "lib/MarkovBigram"]
 	path = lib/MarkovBigram
 	url = git://github.com/robertkleffner/MarkovBigram.git
+[submodule "lib/php-twitteroauth"]
+	path = lib/php-twitteroauth
+	url = git://github.com/abraham/twitteroauth
