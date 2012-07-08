@@ -119,8 +119,8 @@ if ( strlen( $output ) > 130 ) {
 // Balance parentheses
 $output = horse_thatbooks_balance_parens( $output );
 
-// Too many links makes it not so funny. Throttle them a bit
 // Balance quotes
+$output = horse_thatbooks_balance_quotes( $output );
 
 $output .= ' #thatcamp';
 

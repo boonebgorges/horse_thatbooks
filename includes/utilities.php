@@ -97,4 +97,67 @@ function horse_thatbooks_balance_parens( $output ) {
 	return $output;
 }
 
+/**
+ * Balance quotes in a tweet
+ *
+ * This is not a true quote balancer. It's very lazy. It tries to match orphan parens by mirroring
+ * them on the other end of the word. It is very buggy and works poorly with multiple sets of
+ * quotation marks. Use at your own risk.
+ *
+ * @param str $output
+ * @return str $output
+ */
+function horse_thatbooks_balance_quotes( $output ) {
+	if ( false !== strpos( $output, '"' ) ) {
+
+		// Do it twice: once forward and once backward
+		$counter = 0;
+		while ( $counter < 2 ) {
+			$pos = 0;
+			$rpos = 0;
+			$len = strlen( $output );
+
+			// In brief:
+			// - Walk through the string to look for open-quotes
+			// - When one is found, look for a paired close-quote from the end of the
+			//   string
+			// - If none is found, throw a quote at the end of the word and keep walkin'
+			while ( $pos < $len ) {
+				if ( $pos === 0 && '"' == substr( $output, 0, 1 ) ) {
+					$o_pos = 0;
+				} else {
+					$o_pos = strpos( $output, ' "', $pos );
+				}
+				if ( false !== $o_pos ) {
+					$c_pos = strrpos( $output, '" ', $rpos );
+
+					if ( false === $c_pos || $o_pos > $c_pos ) {
+						preg_match( '/\s/', $output, $eow, PREG_OFFSET_CAPTURE, $o_pos + 1 );
+						$eow_pos = isset( $eow[0][1] ) ? $eow[0][1] : false;
+
+						if ( false !== $eow_pos ) {
+							$output = substr( $output, 0, $eow_pos ) . '"' . substr( $output, $eow_pos );
+						}
+
+						// Reset the string length
+						$len++;
+					} else {
+						$rpos = $rpos - $c_pos;
+					}
+
+					$pos = $o_pos + 1;
+				} else {
+					$pos = $len;
+				}
+			}
+
+			$output = strrev( $output );
+			$counter++;
+		}
+
+	}
+
+	return $output;
+}
+
 ?>
