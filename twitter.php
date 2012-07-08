@@ -87,14 +87,6 @@ require_once( dirname(__FILE__) . '/lib/MarkovBigram/markov.php' );
 $markov = new MarkovBigram();
 $output = $markov->GenerateModelResult($raw_text);
 
-// The markov generator strips some URL formats
-$botched_url_snippets = array(
-	'/tco/' => '/t.co/'
-);
-foreach( $botched_url_snippets as $bus => $r ) {
-	$output = str_replace( $bus, $r, $output );
-}
-
 // Send an API request to verify credentials
 $credentials = $oauth->get("account/verify_credentials");
 
@@ -124,6 +116,9 @@ $output = horse_thatbooks_balance_parens( $output );
 
 // Balance quotes
 $output = horse_thatbooks_balance_quotes( $output );
+
+// Miscellaneous cleanup
+$output = horse_thatbooks_misc_cleanup( $output );
 
 $output .= ' #thatcamp';
 

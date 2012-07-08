@@ -186,4 +186,49 @@ function horse_thatbooks_balance_quotes( $output ) {
 	return $output;
 }
 
+/**
+ * Miscellaneous text cleanup
+ *
+ * Between the Markov chain tool and the Twitter API, some formatting tends to get a bit mangled.
+ * This function does a couple different kinds of checks to fix the issues.
+ *
+ * Currently does the following:
+ * - Unbreaks certain link shorteners
+ * - Undecodes certain HTML entities
+ * - Removes funky characters from the beginning of strings
+ */
+function horse_thatbooks_misc_cleanup( $output ) {
+	// MANGLED LINK SHORTENERS
+	$botched_url_snippets = array(
+		'/tco/' => '/t.co/'
+	);
+
+	foreach( $botched_url_snippets as $bus => $r ) {
+		$output = str_replace( $bus, $r, $output );
+	}
+
+	// HTML ENTITIES
+	$output = htmlspecialchars_decode( $output );
+
+	// BEGINNINGS OF STRINGS
+	// The only non-alphanumeric character allowed at the beginning of strings is a dot, when
+	// followed immediately by an @
+	preg_match( '/^[a-zA-Z@0-9]/', $output, $matches );
+	if ( empty( $matches ) ) {
+		switch ( substr( trim( $output ), 0, 1 ) ) {
+			case '.' :
+				if ( '@' == substr( trim( $output ), 1, 1 ) ) {
+					break;
+				}
+				// else fall through
+
+			default :
+				$output = trim( substr( trim( $output ), 1 ) );
+				break;
+		}
+	}
+
+	return $output;
+}
+
 ?>
