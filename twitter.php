@@ -102,6 +102,9 @@ $credentials = $oauth->get("account/verify_credentials");
  * Do some text transformations
  */
 
+// Too many links makes it not so funny
+$output = horse_thatbooks_throttle_links( $output );
+
 // Make sure we're short enough
 if ( strlen( $output ) > 130 ) {
 	$output_a = explode( ' ', $output );

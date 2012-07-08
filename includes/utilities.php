@@ -5,6 +5,32 @@
  */
 
 /**
+ * Throttle links
+ *
+ * Tweets full of links are not all that funny. Let's throttle them a bit (1/4)
+ *
+ * @param str $output The raw tweet
+ * @return str $output The tweet, possibly with some links replaced
+ */
+function horse_thatbooks_throttle_links( $output ) {
+	$output_a = explode( ' ', $output );
+
+	foreach( $output_a as $k => $word ) {
+		if ( 0 === strpos( $word, 'http' ) ) {
+			// Roll the dice
+			$rand = rand( 0, 3 );
+			if ( 0 != $rand ) {
+				unset( $output_a[$k] );
+			}
+		}
+	}
+
+	$output = implode( ' ', $output_a );
+
+	return $output;
+}
+
+/**
  * Balance parentheses
  *
  * Note: This is not a true parentheses balancer. I didn't want anything too fancy, so I just made
