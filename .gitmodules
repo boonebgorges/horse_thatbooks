@@ -1,0 +1,3 @@
+[submodule "lib/MarkovBigram"]
+	path = lib/MarkovBigram
+	url = git://github.com/robertkleffner/MarkovBigram.git
