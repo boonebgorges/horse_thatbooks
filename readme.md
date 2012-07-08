@@ -16,6 +16,11 @@ Thanks to the following libraries:
 
 == How to use ==
 
+1. Download this repo. Note that the external libraries listed above are linked as submodules. If you're running a git clone, you can fetch them with
+        
+        git submodule init
+        git submodule update
+    If you've downloaded the zip file from Github, you'll have to get the libraries yourself (from the links above) and place the files in their respective directories (`lib/php-twitteroauth` and `lib/MarkovBigram`)
 1. Create a file called tweets.txt
 1. Copy config.sample.php to config.php
 1. Get creds from Twitter
