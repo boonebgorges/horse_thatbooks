@@ -77,8 +77,6 @@ file_put_contents( 'tweets.txt', json_encode( $existing_tweets ) );
 
 // Assemble raw text for markov before unsetting temp var
 $raw_text = implode( '. ', $existing_tweets );
-//echo $raw_text; die();
-
 unset( $existing_tweets );
 
 // Get the markov tool
@@ -120,6 +118,7 @@ $output = horse_thatbooks_balance_quotes( $output );
 // Miscellaneous cleanup
 $output = horse_thatbooks_misc_cleanup( $output );
 
+// Add the #thatcamp hash tag
 $output .= ' #thatcamp';
 
 // Post status
