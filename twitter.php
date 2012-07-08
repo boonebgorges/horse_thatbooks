@@ -17,25 +17,24 @@ if ( defined( 'THROTTLE' ) && THROTTLE ) {
 
 $query = "#thatcamp";
 
-// Don't include tweets from the following users
-$exclude_users = array(
-	'horse_thatbooks'
-);
-
 // Create our twitter API object
 require_once( dirname(__FILE__) . '/lib/php-twitteroauth/twitteroauth/twitteroauth.php' );
 $oauth = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
 
-// Get search
-$tweets_found = $oauth->get(
-	'http://search.twitter.com/search.json',
-	array(
-		'q' => $query,
-		//'since_id' => $since_id,
-		'include_entities' => false,
-		'page' => 1,
-		'rpp' => 100
-	) )->results;
+// Get search. Go back and get the most recent few pages, for better completeness
+$tweets_found = array();
+for ( $i = 1; $i <= 5; $i++ ) {
+	$these_tweets = $oauth->get(
+		'http://search.twitter.com/search.json',
+		array(
+			'q' => $query,
+			//'since_id' => $since_id,
+			'include_entities' => false,
+			'page' => $i,
+			'rpp' => 100
+		) )->results;
+	$tweets_found = array_merge( $tweets_found, $these_tweets );
+}
 
 // Parse them into the textdump
 $existing_tweets = (array) json_decode( file_get_contents( 'tweets.txt' ) );
@@ -44,28 +43,44 @@ if ( empty( $existing_tweets ) ) {
 	$existing_tweets = array();
 }
 
+// Don't include tweets from the following users
+$exclude_users = array(
+	'horse_thatbooks' // THE RECURSION IS KILLING ME
+);
+
 foreach( $tweets_found as $tweet ) {
+
+	// Exclude from the user blacklist
 	if ( in_array( $tweet->from_user, $exclude_users ) ) {
 		continue;
 	}
 
-	if ( !isset( $existing_tweets[$tweet->id] ) ) {
-
-		// Process the tweet text
-		$tweet_text = $tweet->text;
-
-		$things_to_remove = array(
-			'#thatcamp'
-		);
-
-		foreach( $things_to_remove as $tor ) {
-			$tweet_text = str_ireplace( $tor, '', $tweet_text );
-		}
-
-		$existing_tweets[$tweet->id] = $tweet_text;
+	// Don't even bother looking at it if we've already stored it
+	if ( isset( $existing_tweets[$tweet->id_str] ) ) {
+		continue;
 	}
-}
 
+	// Process the tweet text
+	$tweet_text = $tweet->text;
+
+	$things_to_remove = array(
+		'#thatcamp'
+	);
+
+	foreach( $things_to_remove as $tor ) {
+		$tweet_text = str_ireplace( $tor, '', $tweet_text );
+	}
+
+	// Now that we've got prepared text, check to make sure it's not a duplicate (mostly this
+	// means many-times-retweeted tweets, which gum up the works a bit)
+	$maybe_key = array_search( $tweet_text, $existing_tweets );
+
+	if ( $maybe_key ) {
+		continue;
+	}
+
+	$existing_tweets[$tweet->id_str] = $tweet_text;
+}
 
 $etcount = count( $existing_tweets );
 
