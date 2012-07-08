@@ -3,7 +3,7 @@
 require( dirname(__FILE__) . '/config.php' );
 
 // Sometimes I turn off the throttle if I want to fire a tweet manually
-define( 'THROTTLE', 1 );
+//define( 'THROTTLE', 1 );
 
 // On my setup, cron hits this script once every minute. I only run it one out of every 480 times (roughly every 8 hours).
 // Adjust as necessary
@@ -112,8 +112,8 @@ if ( strlen( $output ) > 130 ) {
 }
 
 $output .= ' #thatcamp';
-/*echo $output . '
-'; die();*/
+echo $output . '
+'; die();
 
 // Post status
 $oauth->post('statuses/update', array('status' => $output));
