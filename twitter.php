@@ -1,9 +1,10 @@
 <?php
 
 require( dirname(__FILE__) . '/config.php' );
+require( dirname(__FILE__) . '/includes/utilities.php' );
 
 // Sometimes I turn off the throttle if I want to fire a tweet manually
-//define( 'THROTTLE', 1 );
+define( 'THROTTLE', 1 );
 
 // On my setup, cron hits this script once every minute. I only run it one out of every 480 times (roughly every 8 hours).
 // Adjust as necessary
@@ -97,6 +98,10 @@ foreach( $botched_url_snippets as $bus => $r ) {
 // Send an API request to verify credentials
 $credentials = $oauth->get("account/verify_credentials");
 
+/**
+ * Do some text transformations
+ */
+
 // Make sure we're short enough
 if ( strlen( $output ) > 130 ) {
 	$output_a = explode( ' ', $output );
@@ -111,9 +116,13 @@ if ( strlen( $output ) > 130 ) {
 	}
 }
 
+// Balance parentheses
+$output = horse_thatbooks_balance_parens( $output );
+
+// Too many links makes it not so funny. Throttle them a bit
+// Balance quotes
+
 $output .= ' #thatcamp';
-echo $output . '
-'; die();
 
 // Post status
 $oauth->post('statuses/update', array('status' => $output));
